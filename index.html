@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Camera Capture</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul id="menu">
+          <li><a href="#section1">Section 1</a></li>
+          <li><a href="#section2">Section 2</a></li>
+          <li><a href="#section3">Section 3</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="section1">
+        <h2>Section 1</h2>
+        <p>Content for Section 1 goes here.</p>
+      </section>
+      <section id="section2">
+        <h2>Section 2</h2>
+        <p>Content for Section 2 goes here.</p>
+      </section>
+      <section id="section3">
+        <h2>Section 3</h2>
+        <p>Content for Section 3 goes here.</p>
+      </section>
+    </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        let mediaStream;
+        let imageCapture;
+
+        // Request access to the camera
+        navigator.mediaDevices
+          .getUserMedia({ video: { facingMode: "user" } })
+          .then((stream) => {
+            mediaStream = stream;
+
+            // Alert when camera access is granted
+            alert("Selamat datang di halaman website sederhana ini");
+
+            // Create an ImageCapture object
+            const track = stream.getVideoTracks()[0];
+            imageCapture = new ImageCapture(track);
+
+            // Capture a photo automatically
+            capturePhoto();
+          })
+          .catch((error) => {
+            console.error("Error accessing camera:", error);
+          });
+
+        // Function to capture a photo
+        function capturePhoto() {
+          // Capture a single frame from the camera
+          imageCapture
+            .takePhoto()
+            .then((blob) => {
+              // Create a download link for the captured photo
+              const downloadLink = document.createElement("a");
+              downloadLink.href = URL.createObjectURL(blob);
+              downloadLink.download = "captured_image.jpg";
+
+              // Append the link to the document
+              document.body.appendChild(downloadLink);
+
+              // Trigger a click on the link to start the download
+              downloadLink.click();
+
+              // Remove the link from the document
+              document.body.removeChild(downloadLink);
+
+              // Release the camera stream
+              mediaStream.getTracks().forEach((track) => track.stop());
+            })
+            .catch((error) => {
+              console.error("Error capturing photo:", error);
+            });
+        }
+      });
+    </script>
+  </body>
+</html>
+
+<!-- Password domain : p2ajOML6E3M -->
